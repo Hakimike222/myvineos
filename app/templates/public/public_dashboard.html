@@ -1,0 +1,81 @@
+{% extends "base_public.html" %}
+
+{% block title %}Church feed{% endblock %}
+
+{% block content %}
+{% set feed_type = feed_type|default('') %}
+{% set feed_when = feed_when|default('all') %}
+<div class="feed-page">
+  <header class="feed-page-head">
+    <div>
+      <p class="page-kicker">Church family</p>
+      <h1 class="page-title">Feed</h1>
+      <p class="page-description">Events, prayers, sermons, and updates in one place. Tap a card to open it.</p>
+    </div>
+    {% if session.get('user_id') %}
+    <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-secondary">My dashboard</a>
+    {% endif %}
+  </header>
+
+  {% if compose_types %}
+    {% include 'partials/compose_card.html' %}
+  {% endif %}
+
+  <nav class="feed-filters" aria-label="Filter the feed">
+    <div class="feed-filter-row" role="group" aria-label="What to show">
+      {% for chip in feed_type_filters %}
+      <a class="feed-chip {% if chip.active %}is-active{% endif %}" href="{{ chip.href }}">{{ chip.label }}</a>
+      {% endfor %}
+    </div>
+    <div class="feed-filter-row" role="group" aria-label="When">
+      {% for chip in feed_when_filters %}
+      <a class="feed-chip feed-chip-quiet {% if chip.active %}is-active{% endif %}" href="{{ chip.href }}">{{ chip.label }}</a>
+      {% endfor %}
+    </div>
+  </nav>
+
+  {% if feed %}
+  <div class="feed-stack">
+    {% set ns = namespace(group='') %}
+    {% for item in feed %}
+    {% if item.group and item.group != ns.group %}
+      {% set ns.group = item.group %}
+      <h2 class="feed-group-label">{{ item.group }}</h2>
+    {% endif %}
+    <article class="glass-panel feed-card">
+      <a class="feed-card-hit" {% if item.detail_url %}href="{{ item.detail_url }}"{% endif %}>
+        <div class="feed-card-head">
+          <span class="feed-type-pill" data-type="{{ item.type }}">{{ item.type_label }}</span>
+          <span class="feed-card-meta">
+            {% if item.formatted_date %}{{ item.formatted_date }}{% endif %}
+            {% if item.formatted_time %} · {{ item.formatted_time }}{% endif %}
+            {% if item.creator_name or item.posted_by %} · {{ item.creator_name or item.posted_by }}{% endif %}
+          </span>
+        </div>
+        <h3>{{ item.title }}</h3>
+        {% if item.body %}
+        <p>{{ item.body | truncate(180) }}</p>
+        {% endif %}
+        <div class="feed-card-foot">
+          {% if item.comments %}
+          <span><i class="fa-regular fa-comment" aria-hidden="true"></i> {{ item.comments|length }}</span>
+          {% endif %}
+          <span class="feed-card-open">Open</span>
+        </div>
+      </a>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="glass-panel feed-empty">
+    <p>Nothing matches these filters. Try All dates, or open Prayers / Events directly.</p>
+    <div class="feed-empty-links">
+      <a href="{{ url_for('public.public_events.public_events') }}">Events</a>
+      <a href="{{ url_for('public.public_prayers.public_prayers') }}">Prayers</a>
+      <a href="{{ url_for('public.public_sermons.public_sermons') }}">Sermons</a>
+      <a href="{{ url_for('public.public_announcements.public_announcements') }}">Updates</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

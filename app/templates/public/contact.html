@@ -1,0 +1,20 @@
+{% extends base_layout %}
+{% block title %}Contact Us{% endblock %}
+{% block content %}
+<div class="promotions-page">
+  <header class="promotions-header">
+    <h1 class="page-title"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Contact Us</h1>
+    <p class="page-description promotions-intro">We'd love to hear from you.</p>
+  </header>
+  <div class="glass-panel promotion-card">
+    <div class="promotion-card-body">
+      <h2 class="promotion-title">Get in Touch</h2>
+      <div class="promotion-text">
+        <p><strong>Email:</strong> {{ settings.church_email or 'church@example.com' }}</p>
+        <p><strong>Phone:</strong> {{ settings.church_phone or '(000) 000-0000' }}</p>
+        <p><strong>Address:</strong> {{ settings.church_address or 'Your church address here' }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

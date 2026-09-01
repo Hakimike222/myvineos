@@ -94,6 +94,8 @@ def build_all(verbose: bool = False) -> None:
         'family_relations',
         'member_roles',
         'user_widgets',
+        'settings',         # Creates the settings table - must run before appearance
+        'appearance',       # ALTERs settings table - must run after settings exists
         'timezone_setting',  # <- ADDED: Runs last - safe ALTER on settings table
         'comment_moderation',  # After all comment tables exist
     ]

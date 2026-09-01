@@ -20,11 +20,11 @@ def create_tables(cursor):
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id                          INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-            username                    TEXT UNIQUE NOT NULL,
+            username                    VARCHAR(255) UNIQUE NOT NULL,
             password                    TEXT NOT NULL,
             first_name                  TEXT,
             last_name                   TEXT,
-            email                       TEXT UNIQUE,
+            email                       VARCHAR(255) UNIQUE,
             phone                       TEXT,
             address                     TEXT,
             birthday                    DATE,
@@ -61,11 +61,11 @@ def create_tables(cursor):
     existing_columns = [row[0] for row in cursor.fetchall()]
 
     columns_to_add = {
-        'username':                    "TEXT UNIQUE NOT NULL",
+        'username':                    "VARCHAR(255) UNIQUE NOT NULL",
         'password':                    "TEXT NOT NULL",
         'first_name':                  "TEXT",
         'last_name':                   "TEXT",
-        'email':                       "TEXT UNIQUE",
+        'email':                       "VARCHAR(255) UNIQUE",
         'phone':                       "TEXT",
         'address':                     "TEXT",
         'birthday':                    "DATE",

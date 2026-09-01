@@ -297,7 +297,7 @@ def create_tables(cursor):
         pass
 
     try:
-        cursor.execute("UPDATE groups SET system_key = 'worship_team' WHERE name = 'Worship Team Group' AND (system_key IS NULL OR system_key = '')")
+        cursor.execute("UPDATE `groups` SET system_key = 'worship_team' WHERE name = 'Worship Team Group' AND (system_key IS NULL OR system_key = '')")
     except Exception:
         pass
 

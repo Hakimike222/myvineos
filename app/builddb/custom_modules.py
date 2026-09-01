@@ -36,8 +36,8 @@ def create_tables(cursor):
             updated_by INT UNSIGNED NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE SET NULL,
-            FOREIGN KEY (manage_group_id) REFERENCES groups(id) ON DELETE SET NULL,
+            FOREIGN KEY (group_id) REFERENCES `groups`(id) ON DELETE SET NULL,
+            FOREIGN KEY (manage_group_id) REFERENCES `groups`(id) ON DELETE SET NULL,
             FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL,
             FOREIGN KEY (updated_by) REFERENCES users(id) ON DELETE SET NULL
         ) ENGINE=InnoDB;

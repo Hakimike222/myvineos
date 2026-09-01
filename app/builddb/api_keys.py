@@ -18,7 +18,7 @@ def create_tables(cursor):
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS api_keys (
             id         INT PRIMARY KEY AUTO_INCREMENT,
-            service    TEXT UNIQUE NOT NULL,                 -- e.g., 'gemini', 'openai', 'grok'
+            service    VARCHAR(255) UNIQUE NOT NULL,          -- e.g., 'gemini', 'openai', 'grok'
             api_key    TEXT NOT NULL,                        -- Stored encrypted in application logic
             enabled    INTEGER DEFAULT 1,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

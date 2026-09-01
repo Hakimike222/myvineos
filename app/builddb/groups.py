@@ -17,7 +17,7 @@ def create_tables(cursor):
     """
     # ----- GROUPS TABLE -----
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS groups (
+        CREATE TABLE IF NOT EXISTS `groups` (
             id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
             name VARCHAR(255) NOT NULL UNIQUE,
             description TEXT,
@@ -56,18 +56,18 @@ def create_tables(cursor):
     for col_name, col_def in columns_to_add.items():
         if col_name not in existing_cols:
             print(f"Migration: Adding missing column '{col_name}' to groups table.")
-            cursor.execute(f"ALTER TABLE groups ADD COLUMN {col_name} {col_def}")
+            cursor.execute(f"ALTER TABLE `groups` ADD COLUMN {col_name} {col_def}")
     # Indexes for common queries
     try:
-        cursor.execute("CREATE INDEX idx_groups_visibility ON groups(visibility)")
+        cursor.execute("CREATE INDEX idx_groups_visibility ON `groups`(visibility)")
     except:
         pass
     try:
-        cursor.execute("CREATE INDEX idx_groups_created ON groups(created_at DESC)")
+        cursor.execute("CREATE INDEX idx_groups_created ON `groups`(created_at DESC)")
     except:
         pass
     try:
-        cursor.execute("CREATE UNIQUE INDEX idx_groups_system_key ON groups(system_key)")
+        cursor.execute("CREATE UNIQUE INDEX idx_groups_system_key ON `groups`(system_key)")
     except:
         pass
 
@@ -192,7 +192,7 @@ def create_tables(cursor):
     ]
     for name, desc, visibility, perms in essential_groups:
         cursor.execute("""
-            INSERT IGNORE INTO groups (name, description, visibility, permissions)
+            INSERT IGNORE INTO `groups` (name, description, visibility, permissions)
             VALUES (%s, %s, %s, %s)
         """, (name, desc, visibility, perms))
     print(
@@ -218,7 +218,7 @@ def create_tables(cursor):
         for name, skey, perms in system_group_updates:
             cursor.execute(
                 """
-                UPDATE groups
+                UPDATE `groups`
                 SET system_key = COALESCE(NULLIF(system_key, ''), %s),
                     permissions = %s,
                     description = COALESCE(NULLIF(description, ''), description)
@@ -227,7 +227,7 @@ def create_tables(cursor):
                 (skey, perms, name),
             )
         cursor.execute("""
-            UPDATE groups SET system_key = 'gathering_place'
+            UPDATE `groups` SET system_key = 'gathering_place'
             WHERE system_key IS NULL AND description LIKE %s
         """, ('%Protected system group - access to The Gathering Place Manager%',))
     except Exception as e:
@@ -235,10 +235,10 @@ def create_tables(cursor):
 
     # Ensure Owner is in Gathering Place Managers (Owner always has access; membership keeps roster accurate)
     try:
-        cursor.execute("SELECT id FROM groups WHERE system_key = 'gathering_place' LIMIT 1")
+        cursor.execute("SELECT id FROM `groups` WHERE system_key = 'gathering_place' LIMIT 1")
         gp_row = cursor.fetchone()
         if not gp_row:
-            cursor.execute("SELECT id FROM groups WHERE name = %s LIMIT 1", ("Gathering Place Managers",))
+            cursor.execute("SELECT id FROM `groups` WHERE name = %s LIMIT 1", ("Gathering Place Managers",))
             gp_row = cursor.fetchone()
         if gp_row:
             gp_id = gp_row[0]

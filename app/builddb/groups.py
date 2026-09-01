@@ -23,7 +23,7 @@ def create_tables(cursor):
             description TEXT,
             visibility VARCHAR(20) NOT NULL DEFAULT 'private'
                         CHECK(visibility IN ('public', 'private')),
-            permissions TEXT NOT NULL DEFAULT '[]',
+            permissions VARCHAR(2000) NOT NULL DEFAULT '[]',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             created_by INT UNSIGNED,
@@ -46,7 +46,7 @@ def create_tables(cursor):
     columns_to_add = {
         'description': "TEXT",
         'visibility': "VARCHAR(20) NOT NULL DEFAULT 'private' CHECK(visibility IN ('public', 'private'))",
-        'permissions': "TEXT NOT NULL DEFAULT '[]'",
+        'permissions': "VARCHAR(2000) NOT NULL DEFAULT '[]'",
         'created_at': "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
         'updated_at': "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
         'created_by': "INT UNSIGNED",

@@ -34,7 +34,7 @@ def create_tables(cursor):
             notes           TEXT,
             checked_in_by   INT UNSIGNED NULL,                 -- Staff who manually checked in (if not self)
             FOREIGN KEY (user_id)       REFERENCES users(id)   ON DELETE CASCADE,
-            FOREIGN KEY (group_id)      REFERENCES groups(id)  ON DELETE SET NULL,
+            FOREIGN KEY (group_id)      REFERENCES `groups`(id)  ON DELETE SET NULL,
             FOREIGN KEY (checked_in_by) REFERENCES users(id)   ON DELETE SET NULL,
             UNIQUE (user_id, service_date)                     -- One check-in per user per day
         ) ENGINE=InnoDB;

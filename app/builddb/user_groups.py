@@ -28,7 +28,7 @@ def create_tables(cursor):
             joined_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             assigned_by    INT UNSIGNED,                      -- Made NULLable for SET NULL constraint
             FOREIGN KEY (user_id)     REFERENCES users(id)   ON DELETE CASCADE,
-            FOREIGN KEY (group_id)    REFERENCES groups(id)  ON DELETE CASCADE,
+            FOREIGN KEY (group_id)    REFERENCES `groups`(id)  ON DELETE CASCADE,
             FOREIGN KEY (assigned_by) REFERENCES users(id)   ON DELETE SET NULL,
             UNIQUE (user_id, group_id)
         ) ENGINE=InnoDB;

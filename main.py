@@ -21,6 +21,7 @@ print("Project root detected -> " + PROJECT_ROOT)
 # load_dotenv will not override existing env vars (so launcher can force dev DB creds)
 load_dotenv(os.path.join(PROJECT_ROOT, '.env'))
 
+print("DEBUG MYSQL_HOST =", repr(os.getenv("MYSQL_HOST")))
 # ====================== IMPORT REAL APP + SECURITY ======================
 try:
     from app import create_app

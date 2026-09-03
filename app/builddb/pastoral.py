@@ -245,7 +245,7 @@ def create_tables(cursor):
         CREATE TABLE IF NOT EXISTS service_plan_assignments (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             service_plan_id INT UNSIGNED NOT NULL,
-            role_name TEXT NOT NULL,
+            role_name VARCHAR(191) NOT NULL,
             user_id INT UNSIGNED,
             guest_name VARCHAR(191) NULL,
             UNIQUE KEY uniq_role_per_plan (service_plan_id, role_name),

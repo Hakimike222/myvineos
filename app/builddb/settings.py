@@ -20,18 +20,18 @@ def create_tables(cursor):
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS settings (
             id                          INT PRIMARY KEY AUTO_INCREMENT,
-            export_location             TEXT,
-            sermon_folder_location      TEXT,
-            church_name                 TEXT,
+            export_location             VARCHAR(500),
+            sermon_folder_location      VARCHAR(500),
+            church_name                 VARCHAR(500),
             tax_status                  TEXT,
             address                     TEXT,
             phone_number                TEXT,
             pastor                      TEXT,
             icon_path                   TEXT,
             online_donations_enabled    INTEGER DEFAULT 0,
-            donations_page_title        TEXT DEFAULT 'Support Our Ministry',
-            donations_welcome_text      TEXT DEFAULT 'Thank you for considering a gift to support our ministry.',
-            donations_thank_you_text    TEXT DEFAULT 'Thank you for your generous support!',
+            donations_page_title        TEXT 'Support Our Ministry',
+            donations_welcome_text      TEXT 'Thank you for considering a gift to support our ministry.',
+            donations_thank_you_text    TEXT 'Thank you for your generous support!',
             donations_extra_text        TEXT,
             censored_words              TEXT  -- One per line (UI handles JSON-like storage)
         ) ENGINE=InnoDB
@@ -45,18 +45,18 @@ def create_tables(cursor):
     existing_settings_columns = [row[0] for row in cursor.fetchall()]
 
     settings_columns_to_add = {
-        'export_location':             "TEXT",
-        'sermon_folder_location':      "TEXT",
-        'church_name':                 "TEXT",
+        'export_location':             "VARCHAR(500)",
+        'sermon_folder_location':      "VARCHAR(500)",
+        'church_name':                 "VARCHAR(500)",
         'tax_status':                  "TEXT",
         'address':                     "TEXT",
         'phone_number':                "TEXT",
         'pastor':                      "TEXT",
         'icon_path':                   "TEXT",
         'online_donations_enabled':    "INTEGER DEFAULT 0",
-        'donations_page_title':        "TEXT DEFAULT 'Support Our Ministry'",
-        'donations_welcome_text':      "TEXT DEFAULT 'Thank you for considering a gift to support our ministry.'",
-        'donations_thank_you_text':    "TEXT DEFAULT 'Thank you for your generous support!'",
+        'donations_page_title':        "TEXT 'Support Our Ministry'",
+        'donations_welcome_text':      "TEXT 'Thank you for considering a gift to support our ministry.'",
+        'donations_thank_you_text':    "TEXT 'Thank you for your generous support!'",
         'donations_extra_text':        "TEXT",
         'censored_words':              "TEXT",
         'ai_provider':                 "TEXT",
@@ -80,7 +80,14 @@ def create_tables(cursor):
     # Ensure single row exists (id=1)
     cursor.execute("SELECT 1 FROM settings WHERE id = 1")
     if not cursor.fetchone():
-        cursor.execute("INSERT INTO settings (id) VALUES (1)")
+        cursor.execute("""
+            INSERT INTO settings (id, donations_page_title, donations_welcome_text, donations_thank_you_text)
+            VALUES (1, %s, %s, %s)
+        """, (
+            'Support Our Ministry',
+            'Thank you for considering a gift to support our ministry.',
+            'Thank you for your generous support!'
+        ))
         print("Created initial settings row (id=1).")
 
     # ----- NEW EMAIL_ACCOUNTS TABLE (multiple email configs) -----

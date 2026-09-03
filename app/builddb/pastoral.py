@@ -76,27 +76,7 @@ def create_tables(cursor):
             book VARCHAR(50) NOT NULL,
             chapter INT UNSIGNED NOT NULL,
             verse INT UNSIGNED NOT NULL,
- ~~~~~~~~~~~~~~~~~~~~^^^^^^^^
-  File "/app/app/builddb/pastoral.py", line 449, in create_tables
-    cursor.execute("""
-    ~~~~~~~~~~~~~~^^^^
-        ALTER TABLE pastoral_vault
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ...<3 lines>...
-            ADD COLUMN IF NOT EXISTS source_url TEXT
-    result.read()
-    ~~~~~~~~~~~^^
-  File "/app/.venv/lib/python3.13/site-packages/pymysql/connections.py", line 1245, in read
-    first_packet = self.connection._read_packet()
-  File "/app/.venv/lib/python3.13/site-packages/pymysql/connections.py", line 803, in _read_packet
-    packet.raise_for_error()
-    ~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/app/.venv/lib/python3.13/site-packages/pymysql/protocol.py", line 219, in raise_for_error
-    err.raise_mysql_exception(self._data)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/app/.venv/lib/python3.13/site-packages/pymysql/err.py", line 154, in raise_mysql_exception
-    raise errorclass(errno, errval, sqlstate=sqlstate)
-pymysql.err.ProgrammingError: (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'IF NOT EXISTS title TEXT,\n            ADD COLUMN IF NOT EXISTS section_type VARC' at line 2")            word_index INT UNSIGNED NOT NULL DEFAULT 0,
+            word_index INT UNSIGNED NOT NULL DEFAULT 0,
             surface_word VARCHAR(120),
             UNIQUE KEY uniq_strongs_occ (strongs_number, book, chapter, verse, word_index),
             FOREIGN KEY (strongs_number) REFERENCES strongs_lexicon(number) ON DELETE CASCADE

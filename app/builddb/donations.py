@@ -60,7 +60,16 @@ def create_tables(cursor):
        cursor.execute("CREATE INDEX idx_donations_amount ON donations(amount DESC)")
     except Exception as e:
        print(f"Warning during constraint/index: {e}")
-    cursor.execute("CREATE INDEX IF NOT EXISTS idx_donations_name ON donations(name)")
-    cursor.execute("CREATE INDEX IF NOT EXISTS idx_donations_user_id ON donations(user_id)")
-    cursor.execute("CREATE INDEX IF NOT EXISTS idx_donations_donor_type ON donations(donor_type)")
+    try:
+       cursor.execute("CREATE INDEX idx_donations_name ON donations(name)")
+    except Exception as e:
+       print(f"Warning during constraint/index: {e}")
+    try:
+       cursor.execute("CREATE INDEX idx_donations_user_id ON donations(user_id)")
+    except Exception as e:
+       print(f"Warning during constraint/index: {e}")
+    try:
+       cursor.execute("CREATE INDEX idx_donations_donor_type ON donations(donor_type)")
+    except Exception as e:
+       print(f"Warning during constraint/index: {e}")
     

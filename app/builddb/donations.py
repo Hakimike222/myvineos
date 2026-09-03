@@ -51,8 +51,16 @@ def create_tables(cursor):
             cursor.execute(f"ALTER TABLE donations ADD COLUMN {col_name} {col_def}")
 
     # Indexes for common queries (listings, reports, sorting)
-    cursor.execute("CREATE INDEX IF NOT EXISTS idx_donations_date ON donations(date DESC)")
-    cursor.execute("CREATE INDEX IF NOT EXISTS idx_donations_amount ON donations(amount DESC)")
+    try:
+       cursor.execute("CREATE INDEX idx_donations_date ON donations(date DESC)")
+    except Exception as e:
+       print(f"Warning during constraint/index: {e}")
+
+    try:
+       cursor.execute("CREATE INDEX idx_donations_amount ON donations(amount DESC)")
+    except Exception as e:
+       print(f"Warning during constraint/index: {e}")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_donations_name ON donations(name)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_donations_user_id ON donations(user_id)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_donations_donor_type ON donations(donor_type)")
+    

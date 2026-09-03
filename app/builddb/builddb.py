@@ -96,6 +96,8 @@ def build_all(verbose: bool = False) -> None:
         'user_widgets',
         'settings',         # Creates the settings table - must run before appearance
         'appearance',       # ALTERs settings table - must run after settings exists
+        'donations',        # Must exist before donation_email_import runs ALTER TABLE
+        'donation_email_import',  # ALTERs donations table - must run after donations exists
         'timezone_setting',  # <- ADDED: Runs last - safe ALTER on settings table
         'comment_moderation',  # After all comment tables exist
     ]

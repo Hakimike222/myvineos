@@ -29,10 +29,13 @@ def create_tables(cursor):
     """)
 
     # Index for efficient public page loading
-    cursor.execute("""
-        CREATE INDEX IF NOT EXISTS idx_online_options_sort 
+    try:
+       cursor.execute("""
+        CREATE INDEX idx_online_options_sort
         ON online_donation_options(sort_order, enabled)
-    """)
+       """)
+    except Exception as e:
+        print(f"Warning during constraint/index: {e}")
 
     # Safe column additions (in case of future expansions)
     cursor.execute("""

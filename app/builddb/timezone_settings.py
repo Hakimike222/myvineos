@@ -29,7 +29,7 @@ def create_tables(cursor):
         print("Migration: Adding 'timezone' column to settings table.")
         cursor.execute("""
             ALTER TABLE settings
-            ADD COLUMN timezone TEXT DEFAULT 'America/Chicago'
+            ADD COLUMN timezone TEXT
         """)
         print("Added timezone column with DEFAULT 'America/Chicago'.")
     else:

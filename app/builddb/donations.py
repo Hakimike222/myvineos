@@ -42,7 +42,7 @@ def create_tables(cursor):
         'user_id':                  "INT NULL",
         'donor_email':              "TEXT",
         'donor_phone':              "TEXT",
-        'donor_type':               "TEXT DEFAULT 'guest'",
+        'donor_type':               "TEXT",
     }
 
     for col_name, col_def in columns_to_add.items():

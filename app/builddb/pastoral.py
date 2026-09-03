@@ -435,10 +435,19 @@ def create_tables(cursor):
 
     # Safe migration for pastoral_vault
     print(" Migration: Updating pastoral_vault schema...")
+    try:
+        cursor.execute("ALTER TABLE pastoral_vault MODIFY COLUMN user_id INT UNSIGNED NULL")
+    except Exception as e:
+        print(f"Warning during pastoral_vault migration: {e}")
+    try:
+        cursor.execute("""
+            ALTER TABLE pastoral_vault
+            MODIFY COLUMN visibility ENUM('private', 'pastoral_group') NOT NULL DEFAULT 'private'
+        """)
+    except Exception as e:
+        print(f"Warning during pastoral_vault migration: {e}")
     cursor.execute("""
         ALTER TABLE pastoral_vault
-            MODIFY COLUMN IF EXISTS user_id INT UNSIGNED NULL,
-            MODIFY COLUMN IF EXISTS visibility ENUM('private', 'pastoral_group') NOT NULL DEFAULT 'private',
             ADD COLUMN IF NOT EXISTS title TEXT,
             ADD COLUMN IF NOT EXISTS section_type VARCHAR(50) DEFAULT 'point',
             ADD COLUMN IF NOT EXISTS scripture_reference TEXT,

@@ -52,3 +52,4 @@ PyPDF2==3.0.1
 typing_extensions==4.15.0
 gunicorn==23.0.0
 # force rebuild Tue Sep  1 11:36:40 CEST 2026
+requests==2.32.3

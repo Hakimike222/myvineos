@@ -7,6 +7,8 @@ from app.models.db import get_db
 from app.utils.field_crypto import decrypt
 from app.utils.smtp_client import send_smtp_message
 
+import os
+import requests
 
 def get_email_account():
     """Return the default email account or the first available one."""
@@ -52,13 +54,33 @@ def get_outgoing_from_address() -> str | None:
 
 
 def send_email(to_email: str, subject: str, body: str, html_body: str = None):
-    """Send plain-text (and optional HTML) email using the configured default account."""
+    """Send email via Resend API if configured, otherwise fall back to SMTP."""
+    resend_key = os.getenv('RESEND_API_KEY')
+    if resend_key:
+        from_addr = os.getenv('RESEND_FROM_ADDRESS', 'onboarding@resend.dev')
+        payload = {
+            "from": from_addr,
+            "to": [to_email],
+            "subject": subject,
+            "text": body,
+        }
+        if html_body:
+            payload["html"] = html_body
+        resp = requests.post(
+            "https://api.resend.com/emails",
+            headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
+            json=payload,
+            timeout=15,
+        )
+        if resp.status_code >= 300:
+            raise ValueError(f"Resend API error {resp.status_code}: {resp.text}")
+        return
+
     account = get_email_account()
     username = decrypt(account['outgoing_username'])
     password = decrypt(account['outgoing_password'])
     if not username or not password:
         raise ValueError("Email account is missing username or password.")
-
     msg = MIMEMultipart('alternative')
     msg['From'] = username
     msg['To'] = to_email
@@ -66,7 +88,6 @@ def send_email(to_email: str, subject: str, body: str, html_body: str = None):
     msg.attach(MIMEText(body, 'plain'))
     if html_body:
         msg.attach(MIMEText(html_body, 'html'))
-
     send_smtp_message(
         account['outgoing_server'],
         account['outgoing_port'],
